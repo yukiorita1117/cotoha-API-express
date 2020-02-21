@@ -8,6 +8,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 var app = express();
+var axios = require("axios").default;
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -21,8 +22,23 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+
 app.use("/orita", (req, res) => {
-  res.send("あああ");
+  res.send("JSONHardCoderって話");
+});
+
+app.use("/hoge", (req, res) => {
+  axios
+    .get("https://google.com")
+    .then(function(response) {
+      // handle success
+      console.log(response.status);
+      res.send(response.data);
+    })
+    .catch(function(error) {
+      // handle error
+      console.log(error);
+    });
 });
 
 // catch 404 and forward to error handler
