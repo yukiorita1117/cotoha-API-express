@@ -10,16 +10,16 @@ var usersRouter = require("./routes/users");
 var app = express();
 const axios = require("axios");
 
-const cotohaBase = axios.create({
-  baseURL: "https://api.ce-cotoha.com/api/dev/",
-  headers: {
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-    Authorization: "Bearer 7ajoGYGMOHZcfXQADm9PqzSrFGZS"
-  },
-  sentence: "部屋が寒くて震えるって話し",
-  responseType: "json"
-});
+// const cotohaBase = axios.create({
+//   baseURL: "https://api.ce-cotoha.com/api/dev/",
+//   headers: {
+//     "Content-Type": "application/json",
+//     "X-Requested-With": "XMLHttpRequest",
+//     Authorization: "Bearer 7ajoGYGMOHZcfXQADm9PqzSrFGZS"
+//   },
+//   sentence: "部屋が寒くて震えるって話し",
+//   responseType: "json"
+// });
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
