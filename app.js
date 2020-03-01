@@ -8,7 +8,18 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 var app = express();
-var axios = require("axios").default;
+const axios = require("axios");
+
+const cotohaBase = axios.create({
+  baseURL: "https://api.ce-cotoha.com/api/dev/",
+  headers: {
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+    Authorization: "Bearer 7ajoGYGMOHZcfXQADm9PqzSrFGZS"
+  },
+  sentence: "部屋が寒くて震えるって話し",
+  responseType: "json"
+});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -23,10 +34,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
-app.use("/orita", (req, res) => {
-  res.send("JSONHardCoderって話");
-});
-
+//proxyとしてこのserverからgoogleへアクセスし、ブラウザにsend
 app.use("/hoge", (req, res) => {
   axios
     .get("https://google.com")
@@ -40,6 +48,24 @@ app.use("/hoge", (req, res) => {
       console.log(error);
     });
 });
+
+app.post("/cotoha", (req, res) => {
+  //"https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment"
+  axios.post({
+    baseURL: "https://api.ce-cotoha.com/api/dev/",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    Authorization: "Bearer 7ajoGYGMOHZcfXQADm9PqzSrFGZS",
+    sentence: "部屋が寒くて震えるって話し",
+    responseType: "json"
+  });
+});
+
+// app.use("/orita", (req, res) => {
+//   res.send("JSONHardCoderって話");
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
