@@ -49,18 +49,26 @@ app.use("/hoge", (req, res) => {
     });
 });
 
-app.post("/cotoha", (req, res) => {
+app.use("/cotoha", (req, res) => {
   //"https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment"
-  axios.post({
-    baseURL: "https://api.ce-cotoha.com/api/dev/",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Requested-With": "XMLHttpRequest"
-    },
-    Authorization: "Bearer 7ajoGYGMOHZcfXQADm9PqzSrFGZS",
-    sentence: "部屋が寒くて震えるって話し",
-    responseType: "json"
-  });
+  console.log("ここまできてる？");
+  axios
+    .post("https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment", {
+      headers: {
+        "Content-Type": "application/json",
+        // "X-Requested-With": "XMLHttpRequest"
+        Authorization: "Bearer 7ajoGYGMOHZcfXQADm9PqzSrFGZS"
+      },
+      sentence: "部屋が寒くて震えるって話し",
+      responseType: "json"
+    })
+    .then(function(result) {
+      res.send(result);
+    })
+    .catch(function(error) {
+      // handle error
+      console.log(error);
+    });
 });
 
 // app.use("/orita", (req, res) => {
