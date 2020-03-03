@@ -11,17 +11,6 @@ var app = express();
 const axios = require("axios");
 var request = require("request");
 
-// const cotohaBase = axios.create({
-//   baseURL: "https://api.ce-cotoha.com/api/dev/",
-//   headers: {
-//     "Content-Type": "application/json",
-//     "X-Requested-With": "XMLHttpRequest",
-//     Authorization: "Bearer 7ajoGYGMOHZcfXQADm9PqzSrFGZS"
-//   },
-//   sentence: "部屋が寒くて震えるって話し",
-//   responseType: "json"
-// });
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -52,13 +41,13 @@ app.use("/users", usersRouter);
 
 const token = "RleTJxwl9cPkS5po5180UYjaWLfx";
 
-app.use("/cotoha", (req, res) => {
-  var headers = {
+app.use("/cotoha", (req, res, next) => {
+  const headers = {
     "Content-Type": "application/json;charset=UTF-8",
-    Authorization: "Bearer RleTJxwl9cPkS5po5180UYjaWLfx"
+    Authorization: `Bearer ${token}`
   };
-  var dataString = '{"sentence":"青春を謳歌した。"}';
-  var options = {
+  const dataString = '{"sentence":"青春を謳歌した。"}';
+  const options = {
     url: "https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment",
     method: "POST",
     headers: headers,
@@ -68,52 +57,11 @@ app.use("/cotoha", (req, res) => {
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
       console.log(body);
-      console.log("これ？？", body.result);
     }
   }
   request(options, callback);
-  // res.send();
   next();
 });
-
-// axios(
-//   {
-//     method: "POST",
-//     url: "https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment",
-//     headers: { Autorizacion: `Bearer ${token}` },
-//     data: {
-//       sentence: "部屋が寒くて震えるって話し"
-//     }
-//   },
-//   console.log("あああああああああ")
-// )
-//   .then(function(response) {
-//     console.log(response.data);
-//   })
-//   .catch(function(error) {
-//     console.log("エラーだよ！！！", error);
-//   });
-
-// axios
-//   .post("https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment", data)
-//   .then(response => {
-//     console.log("body:", response.data);
-//   });
-// axios({
-//   method: "CREATE",
-//   // url: "",
-//   headers: { autorizacion: `Bearer ${token}` },
-//   data: { sentence: "部屋が寒くて震えるって話し", responseType: "json" }
-// });
-
-// axios
-//   .post("https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment")
-//   .then(function(response) {
-//     res.send(response.data);
-//   })
-//   .catch(function(error) {
-//     console.log("エラーだよ！！！");
-//   });
 
 // axios
 //   .post("https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment", {
@@ -132,12 +80,6 @@ app.use("/cotoha", (req, res) => {
 //     // handle error
 //     console.log(error);
 //   });
-
-// });
-
-// app.use("/orita", (req, res) => {
-//   res.send("JSONHardCoderって話");
-// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
