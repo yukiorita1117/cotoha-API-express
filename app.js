@@ -3,13 +3,16 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const bodyParser = require("body-parser");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const cotohaRouter = require("./routes/cotoha");
 
 var app = express();
 const axios = require("axios");
-var request = require("request");
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -39,47 +42,7 @@ app.use("/users", usersRouter);
 //     });
 // });
 
-const token = "RleTJxwl9cPkS5po5180UYjaWLfx";
-
-app.use("/cotoha", (req, res, next) => {
-  const headers = {
-    "Content-Type": "application/json;charset=UTF-8",
-    Authorization: `Bearer ${token}`
-  };
-  const dataString = '{"sentence":"青春を謳歌した。"}';
-  const options = {
-    url: "https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment",
-    method: "POST",
-    headers: headers,
-    body: dataString
-  };
-
-  function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      console.log(body);
-    }
-  }
-  request(options, callback);
-  next();
-});
-
-// axios
-//   .post("https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment", {
-//     headers: {
-//       "Content-Type": "application/json",
-//       // "X-Requested-With": "XMLHttpRequest"
-//       Authorization: `Bearer ${token}`
-//     },
-//     sentence: "部屋が寒くて震えるって話し",
-//     responseType: "json"
-//   })
-//   .then(function(result) {
-//     res.send(result);
-//   })
-//   .catch(function(error) {
-//     // handle error
-//     console.log(error);
-//   });
+app.use("/cotoha", cotohaRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
